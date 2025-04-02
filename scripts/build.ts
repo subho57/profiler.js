@@ -1,13 +1,16 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { execFile as execFileSync } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
+
 import { build as esbuild } from "esbuild";
 import { isMain } from "is-main";
 import { rimraf } from "rimraf";
+
 import packageJson from "../package.json" with { type: "json" };
 
-const esbuildTarget = `node${packageJson.volta.node.slice(0, 2)}`;
+const esbuildTarget = `node${packageJson.volta.node.split(".")[0]}`;
 
 const execFile = promisify(execFileSync);
 

@@ -1,4 +1,6 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { spawn } from "node:child_process";
+
 import isMain from "is-main";
 
 async function runTests({
@@ -39,7 +41,11 @@ async function runTests({
 				resolve();
 			}
 
-			reject(`🚨 tests failed with code ${code} in ${Date.now() - time}ms`);
+			reject(
+				new Error(
+					`🚨 tests failed with code ${code} in ${Date.now() - time}ms`,
+				),
+			);
 		});
 	});
 }
