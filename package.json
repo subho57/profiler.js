@@ -25,7 +25,10 @@
 	"homepage": "https://github.com/subho57/profiler.js",
 	"bugs": "https://github.com/subho57/profiler.js/issues",
 	"author": "Subhankar Pal <developer.subho57@gmail.com>",
-	"repository": "subho57/profiler.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/subho57/profiler.js.git"
+	},
 	"type": "module",
 	"exports": "./build/index.js",
 	"types": "./build/index.d.ts",
@@ -81,5 +84,8 @@
 		"slugify": "^1.6.6",
 		"typescript": "^5.8.2"
 	},
-	"trustedDependencies": ["@biomejs/biome", "esbuild"]
+	"trustedDependencies": [
+		"@biomejs/biome",
+		"esbuild"
+	]
 }
