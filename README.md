@@ -6,7 +6,7 @@
 
 A lightweight, non-intrusive performance profiler for JavaScript and TypeScript applications, supporting both browser and Node.js environments.
 
-![ProfilingTable](./demo.png)
+![ProfilingTable](https://github.com/user-attachments/assets/3453a932-11da-439c-a32b-e0cd9206f5e7)
 
 ## Features
 
