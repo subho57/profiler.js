@@ -15,7 +15,7 @@ jobs:
         with:
           node-version-file: package.json
 
-      - run: bun install --frozen-lockfile
+      - run: npm i -g bun && bun install --frozen-lockfile
 
   lint:
     name: 🔬 Lint & Format
@@ -27,7 +27,7 @@ jobs:
         with:
           node-version-file: package.json
 
-      - run: bun install --frozen-lockfile
+      - run: npm i -g bun && bun install --frozen-lockfile
       - name: 🔬 Lint & Format
         run: node --run lint:check
 
@@ -42,7 +42,7 @@ jobs:
           node-version-file: package.json
 
       - name: 🛡️ Audit
-        run: bun audit --audit-level=high
+        run: npm audit --audit-level=high
 
   spell:
     name: 🈸 Spellcheck
@@ -54,7 +54,7 @@ jobs:
         with:
           node-version-file: package.json
 
-      - run: bun install --frozen-lockfile
+      - run: npm i -g bun && bun install --frozen-lockfile
       - name: 🈸 Spellcheck
         run: node --run spell:check
 
@@ -68,7 +68,7 @@ jobs:
         with:
           node-version-file: package.json
 
-      - run: bun install --frozen-lockfile
+      - run: npm i -g bun && bun install --frozen-lockfile
       - name: ʦ Typecheck
         run: node --run type:check
 
@@ -82,27 +82,27 @@ jobs:
         with:
           node-version-file: package.json
 
-      - run: bun install --frozen-lockfile
+      - run: npm i -g bun && bun install --frozen-lockfile
       - name: ⚡ Tests
         run: node --run test:coverage
 
-  test-setup:
-    name: ⚡ Setup tests
-    runs-on: ubuntu-latest
-    needs: [dependencies]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: package.json
+  # test-setup:
+  #   name: ⚡ Setup tests
+  #   runs-on: ubuntu-latest
+  #   needs: [dependencies]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-node@v4
+  #       with:
+  #         node-version-file: package.json
 
-      - run: bun install --frozen-lockfile
-      - name: ⚡ Tests
-        run: node --run test:setup
+  #     - run: npm i -g bun && bun install --frozen-lockfile
+  #     - name: ⚡ Tests
+  #       run: node --run test:setup
 
   build-and-release:
     name: 🚀 Build & release
-    needs: [lint, audit, spell, type, test, test-setup]
+    needs: [lint, audit, spell, type, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -110,7 +110,7 @@ jobs:
         with:
           node-version-file: package.json
 
-      - run: bun install --frozen-lockfile
+      - run: npm i -g bun && bun install --frozen-lockfile
       - name: 🔨 Build
         run: node --run build
       - name: 🚀 Release

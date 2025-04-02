@@ -100,6 +100,7 @@ function recordTiming(
 			invocationTimestamps: [],
 			threadBlockingDuration: [],
 		};
+		profiler.functionData[functionName].isPromise = isPromise;
 		profiler.functionData[functionName][`${type}Duration`].push(duration);
 	}
 }
