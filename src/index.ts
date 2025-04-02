@@ -1,5 +1,26 @@
 import { IS_DEV } from "./environment.ts";
 
+export type ProfilerResult = {
+	className: string;
+	functionName: string;
+	isPromise: boolean;
+	threadBlockingDuration: {
+		avg: number;
+		min: number;
+		max: number;
+		p0: number;
+		p99: number;
+	};
+	executionDuration: {
+		avg: number;
+		min: number;
+		max: number;
+		p0: number;
+		p99: number;
+	};
+	invocationTimestamps: number[];
+};
+
 export type FunctionData = {
 	isPromise: boolean;
 	executionDuration: number[];
@@ -11,20 +32,24 @@ export type Profiler = {
 	readonly functionData: Record<string, FunctionData>;
 	readonly componentData: Record<string, number[]>;
 	enabled: boolean | (() => boolean);
-	readonly showResults: () => void;
+	readonly getResults: () => ProfilerResult[];
+	/**
+	 * Logs the results in a prettified format to the console using console.table
+	 */
+	readonly log: () => void;
 };
 
 export const profiler: Profiler = {
 	functionData: {},
 	componentData: {},
 	enabled: IS_DEV,
-	showResults: () => {
-		const functionDataArray = Object.entries(profiler.functionData).map(
-			([functionName, functionData]) => {
+	getResults: () => {
+		const functionDataArray = Object.entries(profiler.functionData)
+			.map(([functionName, functionData]) => {
 				return {
 					className: functionName.includes(".")
 						? functionName.split(".")[0]
-						: "-",
+						: "",
 					functionName: functionName.includes(".")
 						? functionName.split(".")[1]
 						: functionName,
@@ -53,17 +78,39 @@ export const profiler: Profiler = {
 					},
 					invocationTimestamps: functionData.invocationTimestamps,
 				};
-			},
-		);
+			})
+			.sort((a, b) => b.executionDuration.avg - a.executionDuration.avg);
 		// console.table(functionDataArray);
-		return functionDataArray;
+		return functionDataArray as ProfilerResult[];
+	},
+	log() {
+		const results = profiler.getResults();
+		const table = results.reduce(
+			(acc, result) => {
+				const index = result.className
+					? `${result.className}.${result.functionName}`
+					: result.functionName;
+				acc[index] = {
+					isPromise: result.isPromise,
+					"Thread Blocking Duration (in ms)": result.threadBlockingDuration.avg,
+					"Execution Duration (in ms)": result.executionDuration.avg,
+					"Invocation Count": result.invocationTimestamps.length,
+				};
+				return acc;
+			},
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			{} as Record<string, any>,
+		);
+
+		// biome-ignore lint/suspicious/noConsole: Need console.table
+		console.table(table);
 	},
 };
 
 function recordTiming(
 	functionName: string,
 	startTime: number,
-	type: "execution" | "threadBlocking" | "invocation",
+	type: "execution" | "threadBlocking",
 	isPromise: boolean,
 ) {
 	const enabled =
@@ -72,19 +119,6 @@ function recordTiming(
 			: profiler.enabled;
 
 	if (!enabled) {
-		return;
-	}
-
-	if (type === "invocation") {
-		profiler.functionData[functionName] = profiler.functionData[
-			functionName
-		] || {
-			isPromise: false,
-			executionDuration: [],
-			invocationTimestamps: [],
-			threadBlockingDuration: [],
-		};
-		profiler.functionData[functionName].invocationTimestamps.push(startTime);
 		return;
 	}
 
@@ -100,6 +134,12 @@ function recordTiming(
 			invocationTimestamps: [],
 			threadBlockingDuration: [],
 		};
+		if (
+			profiler.functionData[functionName].invocationTimestamps.at(-1) !==
+			startTime
+		) {
+			profiler.functionData[functionName].invocationTimestamps.push(startTime);
+		}
 		profiler.functionData[functionName].isPromise = isPromise;
 		profiler.functionData[functionName][`${type}Duration`].push(duration);
 	}
@@ -117,8 +157,6 @@ function profilerDecorator(
 	descriptor.value = function debug(...args: any[]) {
 		const functionName = `${target.constructor.name === "Function" ? target.name : target.constructor.name}.${propertyKey}`;
 		const startTime = performance.now();
-
-		recordTiming(functionName, startTime, "invocation", false);
 		const result = originalMethod.apply(this, args);
 		recordTiming(functionName, startTime, "threadBlocking", false);
 
@@ -144,8 +182,6 @@ function profilerFunction<T extends (...args: any[]) => any>(fn: T): T {
 	return function debug(...args: Parameters<T>): ReturnType<T> {
 		const functionName = fn.name || "anonymous function";
 		const startTime = performance.now();
-
-		recordTiming(functionName, startTime, "invocation", false);
 		const result = fn(...args);
 		recordTiming(functionName, startTime, "threadBlocking", false);
 
