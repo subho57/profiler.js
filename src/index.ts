@@ -192,7 +192,8 @@ function profilerComponent(
 }
 
 // Export a named function that can be used both as a decorator and a function wrapper
-export function profile<T extends (...args: unknown[]) => unknown>(fn: T): T;
+// biome-ignore lint/suspicious/noExplicitAny: Need any for dynamic property access
+export function profile<T extends (...args: any[]) => any>(fn: T): T;
 export function profile(
 	target: object,
 	propertyKey: string,
