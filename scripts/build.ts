@@ -77,6 +77,7 @@ async function build(): Promise<void> {
 		bundle: true,
 		entryPoints: [path.join(srcPath, "index.ts")],
 		outdir: buildPath,
+		minify: true,
 	});
 
 	// biome-ignore lint/suspicious/noConsole: script file

@@ -1,5 +1,5 @@
-import save from "save-file";
 import { IS_DEV } from "./environment.ts";
+import { saveFile } from "./utils.ts";
 
 export type ProfilerResult = {
 	className: string;
@@ -137,7 +137,7 @@ export const profiler: Profiler = {
 				csvHeaders.join(","),
 				...csvData.map((row) => row.join(",")),
 			].join("\n");
-			save(csvContent, fileName);
+			saveFile(csvContent, fileName, "csv");
 		}
 		return functionDataArray as ProfilerResult[];
 	},
@@ -290,7 +290,7 @@ export const profiler: Profiler = {
 		// Save to file if requested
 		if (saveToFile) {
 			const mdContent = `# Function Execution Sequence Diagram\n\n${diagram}\n`;
-			save(mdContent, fileName);
+			saveFile(mdContent, fileName, "markdown");
 		}
 
 		return diagram;
