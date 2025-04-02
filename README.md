@@ -6,6 +6,8 @@
 
 A lightweight, non-intrusive performance profiler for JavaScript and TypeScript applications, supporting both browser and Node.js environments.
 
+![ProfilingTable](./demo.png)
+
 ## Features
 
 - 📊 Measure execution times, thread blocking duration, and invocation frequencies
@@ -156,7 +158,8 @@ Properties:
 - `functionData`: Record of function profiling data
 - `componentData`: Record of component profiling data (React components when used with React Profiler)
 - `enabled`: Boolean or function to enable/disable profiling
-- `showResults()`: Method to display profiling results
+- `getResults()`: Method to get profiling results in a detailed format
+- `log()`: Method to log profiling results in a prettified format to the console
 
 Example to toggle profiling:
 
@@ -173,7 +176,15 @@ profiler.enabled = () => localStorage.getItem('debug') === 'true';
 
 ## Understanding the Results
 
-The `profiler.showResults()` method returns and logs a table with the following metrics:
+The `profiler.log()` method logs a table to the console with the following metrics:
+
+- **functionName**: Name of the profiled function (with class name if applicable)
+- **isPromise**: Whether the function returns a Promise
+- **Thread Blocking Duration (in ms)**: Average time the main thread was blocked
+- **Execution Duration (in ms)**: Average total execution time
+- **Invocation Count**: Number of times the function was called
+
+For more detailed metrics, you can use `profiler.getResults()` which returns an array of objects with:
 
 - **className**: Name of the class (if applicable)
 - **functionName**: Name of the profiled function
