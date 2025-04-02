@@ -1,6 +1,6 @@
 {
 	"name": "profiler.js",
-	"version": "1.0.6",
+	"version": "1.0.7",
 	"description": "A tool to profile your js code, function execution times, code flow paths, visualize them in a graph-like structure and much more.",
 	"keywords": [
 		"profiler",
@@ -85,5 +85,8 @@
 		"slugify": "^1.6.6",
 		"typescript": "^5.8.2"
 	},
-	"trustedDependencies": ["@biomejs/biome", "esbuild"]
+	"trustedDependencies": ["@biomejs/biome", "esbuild"],
+	"dependencies": {
+		"save-file": "^2.3.1"
+	}
 }
