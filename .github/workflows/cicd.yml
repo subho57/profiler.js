@@ -14,8 +14,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: package.json
-          cache: "npm"
-      - run: npm ci
+          cache: "bun"
+      - run: bun install --frozen-lockfile
 
   lint:
     name: 🔬 Lint & Format
@@ -26,8 +26,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: package.json
-          cache: "npm"
-      - run: npm ci
+          cache: "bun"
+      - run: bun install --frozen-lockfile
       - name: 🔬 Lint & Format
         run: node --run lint:check
 
@@ -40,9 +40,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: package.json
-          cache: "npm"
+          cache: "bun"
       - name: 🛡️ Audit
-        run: npm audit --audit-level=high
+        run: bun audit --audit-level=high
 
   spell:
     name: 🈸 Spellcheck
@@ -53,8 +53,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: package.json
-          cache: "npm"
-      - run: npm ci
+          cache: "bun"
+      - run: bun install --frozen-lockfile
       - name: 🈸 Spellcheck
         run: node --run spell:check
 
@@ -67,8 +67,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: package.json
-          cache: "npm"
-      - run: npm ci
+          cache: "bun"
+      - run: bun install --frozen-lockfile
       - name: ʦ Typecheck
         run: node --run type:check
 
@@ -81,8 +81,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: package.json
-          cache: "npm"
-      - run: npm ci
+          cache: "bun"
+      - run: bun install --frozen-lockfile
       - name: ⚡ Tests
         run: node --run test:coverage
 
@@ -95,8 +95,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: package.json
-          cache: "npm"
-      - run: npm ci
+          cache: "bun"
+      - run: bun install --frozen-lockfile
       - name: ⚡ Tests
         run: node --run test:setup
 
@@ -109,8 +109,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: package.json
-          cache: "npm"
-      - run: npm ci
+          cache: "bun"
+      - run: bun install --frozen-lockfile
       - name: 🔨 Build
         run: node --run build
       - name: 🚀 Release

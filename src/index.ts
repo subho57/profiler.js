@@ -138,7 +138,8 @@ function profilerDecorator(
 	return descriptor;
 }
 
-function profilerFunction<T extends (...args: unknown[]) => unknown>(fn: T): T {
+// biome-ignore lint/suspicious/noExplicitAny: Need any for dynamic property access
+function profilerFunction<T extends (...args: any[]) => any>(fn: T): T {
 	return function debug(...args: Parameters<T>): ReturnType<T> {
 		const functionName = fn.name || "anonymous function";
 		const startTime = performance.now();
@@ -206,7 +207,8 @@ export function profile(
 	commitTime: number,
 ): void;
 
-export function profile<T extends (...args: unknown[]) => unknown>(
+// biome-ignore lint/suspicious/noExplicitAny: Need any for dynamic property access
+export function profile<T extends (...args: any[]) => any>(
 	targetOrFn: object | T | string,
 	propertyKeyOrPhase?: string | "mount" | "update" | "nested-update",
 	descriptorOrActualDuration?: PropertyDescriptor | number,
