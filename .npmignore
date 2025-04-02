@@ -12,7 +12,7 @@ scripts/
 .releaserc.json
 api-extractor.json
 biome.json
-bun.lockb
+bun.lock
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
 tsconfig.json
