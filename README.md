@@ -63,7 +63,7 @@ class UserService {
 }
 
 // Display profiling results
-console.table(profiler.showResults());
+console.table(profiler.getResults());
 ```
 
 ### Using as a Function Wrapper
@@ -88,7 +88,7 @@ fetchProducts('electronics').then(products => {
   console.log(`Total: $${total}`);
   
   // Show profiling results
-  profiler.showResults();
+  profiler.log();
 });
 ```
 
@@ -111,7 +111,6 @@ function App() {
 
 // Later, check the component's render performance
 console.log(profiler.componentData);
-profiler.showResults();
 ```
 
 #### React 18 Support

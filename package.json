@@ -1,6 +1,6 @@
 {
 	"name": "profiler.js",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "A tool to profile your js code, function execution times, code flow paths, visualize them in a graph-like structure and much more.",
 	"keywords": [
 		"profiler",
